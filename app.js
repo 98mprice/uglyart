@@ -20,7 +20,7 @@ db.once('open', function() {
   // Routes
   app.use(express.static(path.join(__dirname, 'js')));
   app.get('/', function(req, res) {
-    res.sendfile(path.join(__dirname + '/index.html'));
+    res.sendfile(path.join(__dirname + '/index2.html'));
   });
   app.post('/', function(request, response) {
       console.log(request.body)
