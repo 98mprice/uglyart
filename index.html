@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>ugly art</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <style>
+    .custom-loader {
+      animation: loader 1s infinite;
+      display: flex;
+    }
+    @-moz-keyframes loader {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    @-webkit-keyframes loader {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    @-o-keyframes loader {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    @keyframes loader {
+      from {
+        transform: rotate(0);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .v-btn__content {
+      text-transform: lowercase !important;
+      font-weight: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-content>
+        <v-container>
+          <div class="display-3">ugly ai art</div>
+          <div class="display-1">help teach the ai to draw ~ draw anything, it doesn't need to look good. the uglier the better. <small>ty ^^</small></div>
+          <div>
+            <v-btn
+              :loading="loading"
+              :disabled="loading"
+              flat
+              icon
+              @click.native="upload"
+            >
+              <v-icon>cloud_upload</v-icon>
+              <span slot="loader" class="custom-loader">
+                <v-icon light>cached</v-icon>
+              </span>
+            </v-btn><-- click me when you&#8217;re done
+            <v-btn flat icon href="#" id="downloader" @click="download()" download="image.png">
+              <v-icon>save_alt</v-icon>
+            </v-btn>
+          </div>
+          <canvas style="background-color: #ffffff; border-style: solid; border-width: 3px; border-color: #202020;" width="640" height="640" id="canvas">
+          </canvas>
+          <canvas style="background-color: #ffffff; border-style: solid; border-width: 3px; border-color: #202020;" width="128" height="128" id="canvas2">
+          </canvas>
+        </v-container>
+      </v-content>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        loading: false
+      },
+      methods: {
+        download: function(){
+          document.getElementById("downloader").download = "image.png";
+          document.getElementById("downloader").href = document.getElementById("canvas2").toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+        },
+        drawToSmallCanvas: function() {
+          //this.loading = true
+          /*var ctx = document.getElementById("canvas").getContext("2d")
+          ctx.scale(0.2, 0.2)
+          ctx.setTransform(1, 0, 0, 1, 0, 0);*/
+          var canvas = document.getElementById("canvas")
+          var destCtx = document.getElementById("canvas2").getContext('2d');
+          destCtx.fillStyle = "white";
+          destCtx.fillRect(0, 0, 128, 128);
+          destCtx.drawImage(canvas, 0, 0, 100, 100 * canvas.height / canvas.width);
+        },
+        upload: function() {
+          this.loading = true
+          this.drawToSmallCanvas()
+          var dataURL = document.getElementById("canvas2").toDataURL();
+          var vm = this
+          axios.post('/', {
+            imgBase64: dataURL
+          })
+          .then(function (response) {
+            vm.loading = false
+            console.log(response);
+          })
+          .catch(function (error) {
+            vm.loading = false
+            console.log(error);
+          });
+        }
+      }
+    })
+  </script>
+
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script  src="index.js"></script>
+
+</body>
+</html>
