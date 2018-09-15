@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb+srv://' + process.env.USERNAME + ':' + process.env.PASSWORD + '@uglyart-4mz9y.mongodb.net/test?retryWrites=true');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
