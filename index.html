@@ -76,9 +76,23 @@
           </div>
           <canvas style="background-color: #ffffff; border-style: solid; border-width: 3px; border-color: #202020;" width="640" height="640" id="canvas">
           </canvas>
-          <canvas style="background-color: #ffffff; border-style: solid; border-width: 3px; border-color: #202020;" width="128" height="128" id="canvas2">
+          <canvas style="background-color: #ffffff; border-style: solid; border-width: 3px; border-color: #202020;" v-show="debug" width="128" height="128" id="canvas2">
           </canvas>
         </v-container>
+        <v-snackbar
+          v-model="snackbar"
+          color="black"
+          multi-line
+        >
+          {{ text }}
+          <v-btn
+            dark
+            flat
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </v-snackbar>
       </v-content>
     </v-app>
   </div>
@@ -90,7 +104,10 @@
     new Vue({
       el: '#app',
       data: {
-        loading: false
+        loading: false,
+        debug: false,
+        snackbar: false,
+        text: ''
       },
       methods: {
         download: function(){
@@ -108,6 +125,11 @@
           destCtx.fillRect(0, 0, 128, 128);
           destCtx.drawImage(canvas, 0, 0, 100, 100 * canvas.height / canvas.width);
         },
+        clearCanvas: function() {
+          var canvas = document.getElementById("canvas")
+          var ctx = canvas.getContext('2d')
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        },
         upload: function() {
           this.loading = true
           this.drawToSmallCanvas()
@@ -118,10 +140,15 @@
           })
           .then(function (response) {
             vm.loading = false
+            vm.clearCanvas()
+            vm.text = "success! the ai is learning from your beautiful, majestic art as we speak. draw another one bro"
+            vm.snackbar = true
             console.log(response);
           })
           .catch(function (error) {
             vm.loading = false
+            vm.text = "oh no something went wrong ><"
+            vm.snackbar = true
             console.log(error);
           });
         }
