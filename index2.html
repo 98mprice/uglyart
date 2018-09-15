@@ -242,26 +242,13 @@
 
 <body onload="init()">
   <div id="app">
-    <v-app>
+    <v-app><v-content>
+    <v-container fluid>
       <v-layout>
     <v-flex xs12 class="pa-2">
           <div class="display-3">ugly ai art</div>
-          <div class="display-1">help teach the ai to draw ~ draw anything, it doesn't need to look good. the uglier the better. <small>ty ^^</small></div>
-          <div>
-            <v-btn
-              :loading="loading"
-              :disabled="loading"
-              flat
-              icon
-              large
-              @click.native="upload"
-            >
-              <v-icon>cloud_upload</v-icon>
-              <span slot="loader" class="custom-loader">
-                <v-icon light>cached</v-icon>
-              </span>
-            </v-btn><-- click me when you&#8217;re done
-            <v-btn large flat icon href="#" id="downloader" @click="download()" download="image.png">
+          <div class="display-1">help teach the ai to draw ~ draw anything, it doesn't need to look good. the uglier the better. <small>ty ^^</small>
+          <v-btn large flat icon href="#" id="downloader" @click="download()" download="image.png">
               <v-icon>save_alt</v-icon>
             </v-btn>
           </div>
@@ -283,9 +270,26 @@
               Close
             </v-btn>
           </v-snackbar>
+          <v-btn
+            fab
+            :loading="loading"
+            :disabled="loading"
+            color="black"
+            dark
+            icon
+            large
+            @click.native="upload"
+          >
+            <v-icon>cloud_upload</v-icon>
+            <span slot="loader" class="custom-loader">
+              <v-icon light>cached</v-icon>
+            </span>
+          </v-btn>
 
     </v-flex>
   </v-layout>
+</v-container>
+</v-content>
     </v-app>
   </div>
 
